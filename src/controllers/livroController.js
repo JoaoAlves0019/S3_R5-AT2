@@ -34,7 +34,9 @@ const livroController = {
 
             if (titulo) {
                 // 2. Se houver um título, chama a função de busca por título do model
-                return livros = await livroModel.buscarPorTitulo(titulo);
+                livros = await livroModel.buscarPorTitulo(titulo);
+
+                return res.status(200).json(livros);
             } 
                 // 3. Se não colocar um titulo, chama a função que lista todos os livros
             
