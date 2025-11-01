@@ -1,65 +1,97 @@
-## 🔌 API Reference
+# 🔌 API Reference
 
-### Produtos
+## Livros
+### GET /livros
+- **Descrição**: Obtém uma lista de livros. Permite buscar todos os livros ou filtrar por título.
+- **Parâmetros Query (opcional)**:
+- titulo (string): Filtra livros por título (busca parcial)
 
-#### GET /produtos
-- **Descrição**: Obtém uma lista de produtos
-- **Response**: Array de produtos
+- **Response (200)**: Array de Livros
 
+#### Exemplo de Response:
+**json**
+```
+[
+  {
+    "idLivro": "uuid-do-livro",
+    "titulo": "Dom Casmurro",
+    "anoPublicacao": 1899,
+    "qtdExemplares": 5,
+    "idAutor": "uuid-do-autor"
+  }
+]
+```
 
-#### POST /produtos
-- **Descrição**: Cria um novo produto
-- **Body**:
+### POST /livros
+- **Descrição**: Cria um novo livro no sistema
+
+#### Exemplo de criação de um novo livro:
+- #### Body (obrigatório):
+**json**
 ```
 {
-    "nomeProduto": "produtoExemplo",
-    "precoProduto": 0.00
+  "titulo": "Nome do Livro",
+  "anoPublicacao": 2024,
+  "qtdExemplares": 10,
+  "idAutor": "uuid-do-autor"
 }
 ```
 
-- **Response**:
+- #### Response (201):
+**json**
 ```
 {
-    "message": "Produto cadastrado com sucesso!"
+  "message": "Livro cadastrado com sucesso!"
+}
+```
+- #### Error Response (400):
+**json**
+```
+{
+  "erro": "O campo título e idAutor é obrigatório."
 }
 ```
 
-- **Error Response**:
+### Estrutura de Dados
+**Objeto Livro**
+```
+typescript
+{
+  idLivro: string,          // UUID do livro
+  titulo: string,           // Título do livro
+  anoPublicacao: number,    // Ano de publicação do livro
+  qtdExemplares: number,    // Quantidade de exemplares do livro
+  idAutor: string          // UUID do autor
+}
+```
+## Exemplos de Uso
+
+### Buscar todos os livros
+- **GET /livros**
+
+### Buscar livros por título
+- **GET /livros?titulo=dom**
+
+### Cadastrar novo livro
+- **POST /livros**
+
+#### Content-Type: application/json
 ```
 {
-    "erro": "Campos obrigatorios não preenchidos!"
+  "titulo": "Memórias Póstumas de Brás Cubas",
+  "anoPublicacao": 1881,
+  "qtdExemplares": 8,
+  "idAutor": "123e4567-e89b-12d3-a456-426614174000"
 }
 ```
 
----------------------------------------------------
+**Observações**
+- Todos os UUIDs devem estar no formato válido
 
-### Clientes
+- O campo titulo é obrigatório no cadastro
 
-#### GET /clientes
-- **Descrição**: Obtém uma lista de Clientes
-- **Response**: Array de clientes
+- O campo idAutor é obrigatório no cadastro e deve referenciar um autor existente
 
-#### POST /clientes
-- **Descrição**: Cria um novo cliente
+- A busca por título utiliza busca parcial (LIKE %titulo%)
 
-- **Body**:
-```
-{
-    "nomeCliente": "nomeExemplo",
-    "cpfCliente": "000.000.000-00"
-}
-```
-
-- **Response**:
-```
-{
-    "message": "Cliente cadastrado com sucesso!"
-}
-```
-
-- **Error Response**:
-```
-{
-    "erro": "Campos obrigatorios não preenchidos!"
-}
-```
+- Campos numéricos (anoPublicacao, qtdExemplares) devem ser inteiros
